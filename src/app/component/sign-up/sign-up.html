@@ -1,0 +1,94 @@
+<div class="min-h-screen flex items-center justify-center bg-base-200">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl font-bold text-center justify-center mb-4">Sign Up</h2>
+
+      @if (errorMessage()) {
+      <div role="alert" class="alert alert-error mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ errorMessage() }}</span>
+      </div>
+      }
+
+      @if (successMessage()) {
+      <div role="alert" class="alert alert-success mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ successMessage() }}</span>
+      </div>
+      }
+
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+        <label class="input outline-none w-full">
+          <span class="label">Username</span>
+          <input type="text" formControlName="username" placeholder="Enter your username"
+            class="input input-md outline-none"
+            [class.input-error]="signUpForm.get('username')?.invalid && signUpForm.get('username')?.touched" />
+        </label>
+        @if (signUpForm.get('username')?.invalid && signUpForm.get('username')?.touched) {
+        <p class="label text-error text-sm mt-1">Username must be at least 3 characters</p>
+        }
+
+        <label class="input mt-4 outline-none w-full">
+          <span class="label">Email</span>
+          <input type="email" formControlName="email" placeholder="Enter your email" class="input input-md outline-none"
+            [class.input-error]="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched" />
+        </label>
+        @if (signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched) {
+        <p class="label text-error text-sm mt-1">Please enter a valid email</p>
+        }
+
+        <label class="input mt-4 outline-none w-full">
+          <span class="label">Password</span>
+          <input type="password" formControlName="password" placeholder="Enter your password"
+            class="input input-md outline-none"
+            [class.input-error]="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched" />
+        </label>
+        @if (signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched) {
+        <p class="label text-error text-sm mt-1">Password must be at least 6 characters</p>
+        }
+
+        <label class="input mt-4 outline-none w-full">
+          <span class="label">Confirm Password</span>
+          <input type="password" formControlName="confirmPassword" placeholder="Confirm your password"
+            class="input input-md outline-none"
+            [class.input-error]="signUpForm.get('confirmPassword')?.invalid && signUpForm.get('confirmPassword')?.touched" />
+        </label>
+        @if (signUpForm.get('confirmPassword')?.hasError('passwordMismatch') &&
+        signUpForm.get('confirmPassword')?.touched) {
+        <p class="label text-error text-sm mt-1">Passwords do not match</p>
+        }
+
+        <label class="input mt-4 outline-none w-full">
+          <span class="label">Role</span>
+          <select formControlName="role" class="select select-md w-full outline-none">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </label>
+
+        <div class="card-actions mt-6">
+          <button type="submit" class="btn btn-primary w-full" [disabled]="signUpForm.invalid || isLoading()">
+            @if (isLoading()) {
+            <span class="loading loading-spinner loading-sm"></span>
+            Creating Account...
+            } @else {
+            Sign Up
+            }
+          </button>
+        </div>
+      </form>
+
+      <div class="divider">OR</div>
+
+      <button type="button" class="btn btn-outline w-full" (click)="navigateToSignIn()">
+        Already have an account? Sign In
+      </button>
+    </div>
+  </div>
+</div>

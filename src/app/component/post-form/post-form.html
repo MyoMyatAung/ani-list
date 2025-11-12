@@ -1,0 +1,91 @@
+<div class="card bg-base-100 shadow-xl mb-6">
+    <div class="card-body">
+        <h2 class="card-title">
+            @if(isEdit()) {
+            Edit Post
+            } @else {
+            What's on your mind?
+            }
+        </h2>
+
+        @if (errorMessage()) {
+        <div role="alert" class="alert alert-error mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ errorMessage() }}</span>
+        </div>
+        }
+
+        @if (successMessage()) {
+        <div role="alert" class="alert alert-success mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ successMessage() }}</span>
+        </div>
+        }
+
+        <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+            <div class="form-control w-full mb-2">
+                <label class="label">
+                    <span class="label-text">Title</span>
+                </label>
+                <input type="text" formControlName="title" placeholder="Enter post title"
+                    class="input input-bordered input-md w-full outline-none"
+                    [class.input-error]="postForm.get('title')?.invalid && postForm.get('title')?.touched" />
+                @if (postForm.get('title')?.invalid && postForm.get('title')?.touched) {
+                <label class="label">
+                    <span class="label-text-alt text-error">Title must be at least 3 characters</span>
+                </label>
+                }
+            </div>
+
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text">Content</span>
+                </label>
+                <textarea formControlName="content" placeholder="Write your post content..."
+                    class="textarea textarea-bordered textarea-md w-full outline-none" rows="4"
+                    [class.textarea-error]="postForm.get('content')?.invalid && postForm.get('content')?.touched"></textarea>
+                @if (postForm.get('content')?.invalid && postForm.get('content')?.touched) {
+                <label class="label">
+                    <span class="label-text-alt text-error">Content must be at least 10 characters</span>
+                </label>
+                }
+            </div>
+
+            <div class="mt-4">
+                <span class="label">Select Tags</span>
+                <div class="flex gap-2 flex-wrap mt-2">
+                    @for (tag of availableTags(); track tag.id) {
+                    <button type="button" class="badge badge-lg cursor-pointer"
+                        [class.badge-primary]="isTagSelected(tag.id)" [class.badge-outline]="!isTagSelected(tag.id)"
+                        (click)="toggleTag(tag.id)">
+                        #{{ tag.name }}
+                    </button>
+                    }
+                </div>
+                @if (selectedTags().size === 0) {
+                <p class="label text-sm text-base-content/70 mt-2">Please select at least one tag</p>
+                }
+            </div>
+
+            <div class="card-actions justify-end mt-6">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="postForm.invalid || selectedTags().size === 0 || isLoading()">
+                    @if (isLoading()) {
+                    <span class="loading loading-spinner loading-sm"></span>
+                    Creating...
+                    } @else {
+                    Create Post
+                    }
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

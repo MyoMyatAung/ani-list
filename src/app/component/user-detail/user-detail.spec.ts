@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { UserDetail } from './user-detail';
 
-import { AniList } from './ani-list';
-
-describe('AniList', () => {
-  let component: AniList;
-  let fixture: ComponentFixture<AniList>;
+describe('UserDetail', () => {
+  let component: UserDetail;
+  let fixture: ComponentFixture<UserDetail>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AniList]
+      imports: [UserDetail]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AniList);
+    fixture = TestBed.createComponent(UserDetail);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
